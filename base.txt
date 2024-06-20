@@ -1,0 +1,1 @@
+Nuxt JS CRUD - Complete nuxt crud using laravel api from scratch tutorial _ Nuxt CRUD operation
