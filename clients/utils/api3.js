@@ -1,7 +1,7 @@
 // utils/api.js
 export const apiBaseUrl = "http://localhost:8000/api";
 
-const Api = async (endpoint, options = {}) => {
+const fetchApi = async (endpoint, options = {}) => {
   const url = `${apiBaseUrl}${endpoint}`;
 
   const token = localStorage.getItem("authToken");
@@ -25,28 +25,28 @@ const Api = async (endpoint, options = {}) => {
   return data.value;
 };
 
-Api.get = (endpoint, options = {}) => {
-  return Api(endpoint, { ...options, method: "GET" });
+fetchApi.get = (endpoint, options = {}) => {
+  return fetchApi(endpoint, { ...options, method: "GET" });
 };
 
-Api.post = (endpoint, body, options = {}) => {
-  return Api(endpoint, {
+fetchApi.post = (endpoint, body, options = {}) => {
+  return fetchApi(endpoint, {
     ...options,
     method: "POST",
     body: JSON.stringify(body),
   });
 };
 
-Api.put = (endpoint, body, options = {}) => {
-  return Api(endpoint, {
+fetchApi.put = (endpoint, body, options = {}) => {
+  return fetchApi(endpoint, {
     ...options,
     method: "PUT",
     body: JSON.stringify(body),
   });
 };
 
-Api.delete = (endpoint, options = {}) => {
-  return Api(endpoint, { ...options, method: "DELETE" });
+fetchApi.delete = (endpoint, options = {}) => {
+  return fetchApi(endpoint, { ...options, method: "DELETE" });
 };
 
-export default Api;
+export default fetchApi;

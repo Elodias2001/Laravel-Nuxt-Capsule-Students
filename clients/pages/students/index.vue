@@ -11,7 +11,7 @@
       </div>
       <div class="card-body">
         <div v-if="isLoading">
-          <Loading :title="isLoadingTitle"/>
+          <Loading :title="isLoadingTitle" />
         </div>
         <div v-else>
           <table class="table table-success table-striped">
@@ -27,7 +27,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, index) in items" :key="index">
+              <tr v-for="(item, index) in students" :key="index">
                 <th scope="row">{{ index + 1 }}</th>
                 <td>{{ item.name }}</td>
                 <td>{{ item.course }}</td>
@@ -35,8 +35,17 @@
                 <td>{{ item.phone }}</td>
                 <td>{{ item.created_at }}</td>
                 <td>
-                  <NuxtLink :to="`/students/${item.id}`" class="btn btn-info btn-sm mx-2">Edit</NuxtLink>
-                  <Button type="button" @click.prevent="deleteItem($event, item.id)" class="btn btn-danger btn-sm mx-2">Delete</Button>
+                  <NuxtLink
+                    :to="`/students/${item.id}`"
+                    class="btn btn-info btn-sm mx-2"
+                    >Edit</NuxtLink
+                  >
+                  <Button
+                    type="button"
+                    @click.prevent="deleteItem($event, item.id)"
+                    class="btn btn-danger btn-sm mx-2"
+                    >Delete</Button
+                  >
                 </td>
               </tr>
             </tbody>
@@ -47,34 +56,20 @@
   </div>
 </template>
 
-<script>
-import useStudentService from '~/services/studentService';
-export default {
-  name: "StudentList",
-  setup(props) {
-    const { items, getItems, isLoading, destroyItem, isLoadingTitle, } = useStudentService();
+<script setup>
+import { useStudentStore } from "~/stores/students";
 
-    const deleteItem = async (event, item_id) =>{
-      if (confirm('Are you sure, you want delete this data ?')) {
-          event.target.innerText = 'Deleting'
-          await destroyItem(item_id)
-          event.target.innerText = 'Delete';
-          await getItems()
-      }
-    }
-    
-    onMounted(async () => {
-      await getItems()
-    });
+// Créer une instance du magasin
+const studentStore = useUserStore();
 
-    return {
-      items,
-      isLoading,
-      isLoadingTitle,
-      deleteItem,
-    }
-  },
-};
+// Utiliser la fonction `onMounted` pour récupérer les étudiants lorsque le composant est monté
+onMounted(async () => {
+  await studentStore.getAllStudents();
+});
+
+// Accéder aux étudiants depuis le magasin
+const students = computed(() => studentStore.items);
+const isLoading = computed(() => studentStore.isLoading);
+const isLoadingTitle = computed(() => studentStore.isLoadingTitle);
+const errors = computed(() => studentStore.errors);
 </script>
-
-<style scoped></style>
